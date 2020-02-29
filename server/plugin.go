@@ -8,6 +8,7 @@ import (
 	"github.com/mattermost/mattermost-server/v5/plugin"
 
 	"database/sql"
+	"encoding/json"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
 )
@@ -22,6 +23,15 @@ type Plugin struct {
 	// configuration is the active plugin configuration. Consult getConfiguration and
 	// setConfiguration for usage.
 	configuration *configuration
+}
+
+// Link struct
+type Link struct {
+	ID      int    `json:"id"`
+	Author  string `json:"author"`
+	Message string `json:"message"`
+	Link    string `json:"link"`
+	Tags    string `json:"tags"`
 }
 
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
@@ -57,19 +67,23 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 		link    string
 		tag     string
 	)
-	rows, err2 := db.Query("select l.id, l.author, l.message, l.link, t.tag from links l join tags t on l.id = t.message_id where l.channel in (" + channelsListStr + ")")
-	if err != nil {
+	rows, err2 := db.Query("select l.id, t.tag from links l join tags t on l.id = t.message_id where l.channel in (" + channelsListStr + ")")
+	if err2 != nil {
 		log.Fatal(err2)
 	}
 	defer rows.Close()
+	rowsLink, err21 := db.Query("select l.id, l.author, l.message, l.link from links l where l.channel in (" + channelsListStr + ")")
+	if err21 != nil {
+		log.Fatal(err21)
+	}
+	defer rowsLink.Close()
 	tagmap := make(map[int]string)
 	var ok bool
 	for rows.Next() {
-		err3 := rows.Scan(&id, &author, &message, &link, &tag)
+		err3 := rows.Scan(&id, &tag)
 		if err3 != nil {
 			log.Fatal(err)
 		}
-		log.Println(id, author, message, link, tag)
 		_, ok = tagmap[id]
 		if ok {
 			tagmap[id] += ", " + tag
@@ -77,15 +91,28 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 			tagmap[id] = tag
 		}
 	}
+	var l Link
+	var result string
+	for rowsLink.Next() {
+		err3 := rowsLink.Scan(&id, &author, &message, &link)
+		if err3 != nil {
+			log.Fatal(err)
+		}
+		l = Link{id, author, message, link, tagmap[id]}
+		s, _ := json.Marshal(l)
+		result += string(s) + ","
+	}
+	result = "[" + result[:len(result)-1] + "]"
 	err = rows.Err()
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(tagmap)
+	log.Println(result)
 
 	// convert to json
+
 	// return
-	fmt.Fprint(w, "Hello, world!")
+	fmt.Fprint(w, result)
 }
 
 // See https://developers.mattermost.com/extend/plugins/server/reference/
