@@ -21,40 +21,6 @@ export default function RHSView() {
 
     return (
         <div style={style.rhs}>
-            <Card className={classes.root}>
-                <CardActionArea>
-                    <CardContent>
-                        <Typography
-                            gutterBottom={true}
-                            variant='h5'
-                            component='h2'
-                        >
-                            {'Hey, checkout this awesome search engine.'}
-                        </Typography>
-                        <Typography
-                            variant='body2'
-                            component='p'
-                        >
-                            {'#google #search #utility'}
-                        </Typography>
-                        <Typography
-                            variant='body2'
-                            color='textSecondary'
-                            component='p'
-                        >
-                            {'www.google.com'}
-                        </Typography>
-                    </CardContent>
-                </CardActionArea>
-                <CardActions>
-                    <Button
-                        size='small'
-                        color='primary'
-                    >
-                        {'Go'}
-                    </Button>
-                </CardActions>
-            </Card>
             {links.map((link) => {
                 return (
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuites name="jest tests" tests="2" failures="0" time="14.412">
-  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-02-27T06:03:44" time="9.188" tests="2">
-    <testcase classname=" Plugin manifest, id and version are defined" name=" Plugin manifest, id and version are defined" time="0.003">
+<testsuites name="jest tests" tests="2" failures="0" time="11.212">
+  <testsuite name="undefined" errors="0" failures="0" skipped="0" timestamp="2020-02-29T13:31:28" time="6.254" tests="2">
+    <testcase classname=" Plugin manifest, id and version are defined" name=" Plugin manifest, id and version are defined" time="0.004">
     </testcase>
     <testcase classname=" Plugin id and version are defined" name=" Plugin id and version are defined" time="0.001">
     </testcase>
