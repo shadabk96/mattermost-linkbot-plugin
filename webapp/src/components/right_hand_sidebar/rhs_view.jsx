@@ -18,8 +18,6 @@ import axios from 'axios';
 
 import PropTypes from 'prop-types';
 
-import Config from 'Config';
-
 const CustomCard = (props) => {
     const maxWidthConst = 345;
     const useStyles = makeStyles({
@@ -93,13 +91,13 @@ export default class RHSView extends React.PureComponent {
     componentDidMount() {
         this.renderPosts();
     }
-
     renderPosts = async () => {
-        await axios(Config.serverUrl + 'plugins/com.github.shadabk96.mattermost-linkbot-plugin').then((res) => {
+        // enter server url here
+        const serverUrl = 'http://localhost:8065/';
+        await axios(serverUrl + 'plugins/com.github.shadabk96.mattermost-linkbot-plugin').then((res) => {
             this.setState({links: res.data, loading: false});
         });
     }
-
     render() {
         if (this.state.loading) {
             return 'Loading';

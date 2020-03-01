@@ -33,9 +33,6 @@ module.exports = {
         'react-redux': 'ReactRedux',
         'prop-types': 'PropTypes',
         'react-bootstrap': 'ReactBootstrap',
-        Config: {
-            serverUrl: 'http://localhost:8065/',
-        },
     },
     output: {
         path: path.join(__dirname, '/dist'),
