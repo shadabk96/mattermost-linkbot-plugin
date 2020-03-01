@@ -18,6 +18,8 @@ import axios from 'axios';
 
 import PropTypes from 'prop-types';
 
+import Paper from '@material-ui/core/Paper';
+
 const CustomCard = (props) => {
     const maxWidthConst = 345;
     const useStyles = makeStyles({
@@ -29,13 +31,13 @@ const CustomCard = (props) => {
     const classes = useStyles();
     const links = data;
     return (
-        <div>
+        <Paper style={{height: 'inherit', overflow: 'auto'}}>
             {links.length === 0 ? (<div>{'Loading...'}</div>) : (links.map((link) => {
                 return (
 
                     <Card
                         className={classes.root}
-                        key={link.link}
+                        key={link.id}
                     >
                         <CardActionArea>
                             <CardContent>
@@ -65,6 +67,8 @@ const CustomCard = (props) => {
                             <Button
                                 size='small'
                                 color='primary'
+                                variant='outlined'
+                                href={link.link}
                             >
                                 {'Go'}
                             </Button>
@@ -72,7 +76,7 @@ const CustomCard = (props) => {
                     </Card>
                 );
             }))}
-        </div>
+        </Paper>
     );
 };
 
