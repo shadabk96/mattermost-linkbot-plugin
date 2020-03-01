@@ -37,25 +37,22 @@ type Link struct {
 // ServeHTTP demonstrates a plugin that handles HTTP requests by greeting the world.
 func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Request) {
 
-	// get Mattermost-User-Id
-	userID := r.Header.Get("Mattermost-User-Id")
-	log.Println("userID" + userID)
-	// get channels for user
+	// user configs:
 	team := "8r4yr7x4nfdytndqn1sidruuxw"
+	dbLocation := "/home/shadab/.local/lib/python2.7/site-packages/mmpy_bot/sqlite.db"
+
+	userID := r.Header.Get("Mattermost-User-Id")
 	channels, err4 := p.API.GetChannelsForTeamForUser(team, userID, false)
 	if err4 != nil {
 		log.Fatal(err4, "failed to get channels for team: %s for user: %s", team, userID)
 	}
-	log.Println(channels)
-	// get links for channel from db
 	channelsListStr := "'"
 	for _, channel := range channels {
 		channelsListStr += channel.Name + "','"
 	}
 	channelsListStr = channelsListStr[:len(channelsListStr)-2]
-	log.Println(channelsListStr)
 
-	db, err := sql.Open("sqlite3", "/home/shadab/.local/lib/python2.7/site-packages/mmpy_bot/sqlite.db")
+	db, err := sql.Open("sqlite3", dbLocation)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -107,11 +104,7 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(result)
 
-	// convert to json
-
-	// return
 	fmt.Fprint(w, result)
 }
 

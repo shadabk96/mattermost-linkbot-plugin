@@ -18,6 +18,8 @@ import axios from 'axios';
 
 import PropTypes from 'prop-types';
 
+import Config from 'Config';
+
 const CustomCard = (props) => {
     const maxWidthConst = 345;
     const useStyles = makeStyles({
@@ -25,11 +27,9 @@ const CustomCard = (props) => {
             maxWidth: maxWidthConst,
         },
     });
-    const {test, data} = props;
-    console.log(test);
+    const {data} = props;
     const classes = useStyles();
     const links = data;
-    console.log(links);
     return (
         <div>
             {links.length === 0 ? (<div>{'Loading...'}</div>) : (links.map((link) => {
@@ -79,7 +79,6 @@ const CustomCard = (props) => {
 };
 
 CustomCard.propTypes = {
-    test: PropTypes.object,
     data: PropTypes.object,
 };
 
@@ -96,21 +95,9 @@ export default class RHSView extends React.PureComponent {
     }
 
     renderPosts = async () => {
-        // const links = [{message: 'message1', tags: '#tag1', link: 'link1'}, {message: 'message2', tags: '#tag2', link: 'link2'}];
-
-        var links = [];
-        await axios('http://localhost:8065/plugins/com.github.shadabk96.mattermost-linkbot-plugin').then((res) => {
-            console.log('1');
-            console.log(res);
-            console.log('2');
-            console.log(res.data);
-            links = res.data;
+        await axios(Config.serverUrl + 'plugins/com.github.shadabk96.mattermost-linkbot-plugin').then((res) => {
             this.setState({links: res.data, loading: false});
         });
-        console.log('3');
-        console.log(links);
-        console.log('4');
-        console.log(this.state.links);
     }
 
     render() {
@@ -120,7 +107,6 @@ export default class RHSView extends React.PureComponent {
         return (
             <CustomCard
                 data={this.state.links}
-                test={'test'}
             />
         );
     }
