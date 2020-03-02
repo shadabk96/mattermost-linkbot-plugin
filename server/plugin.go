@@ -39,7 +39,7 @@ func (p *Plugin) ServeHTTP(c *plugin.Context, w http.ResponseWriter, r *http.Req
 
 	// user configs:
 	team := "8r4yr7x4nfdytndqn1sidruuxw"
-	dbLocation := "/home/shadab/.local/lib/python2.7/site-packages/mmpy_bot/sqlite.db"
+	dbLocation := "/home/shadab/.local/lib/python2.7/site-packages/linkbot/sqlite.db"
 
 	userID := r.Header.Get("Mattermost-User-Id")
 	channels, err4 := p.API.GetChannelsForTeamForUser(team, userID, false)
